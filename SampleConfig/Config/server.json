@@ -1,0 +1,6 @@
+{
+    "port": "9000",
+    "host": "0.0.0.0",
+    "securityLayer": "none",
+    "custom-key" : "custom value"
+}
