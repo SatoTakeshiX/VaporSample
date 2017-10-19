@@ -1,14 +1,1 @@
-#extend("base")
-
-#export("title") { Hello, #(name)! }
-
-`#()`でエスケープされる
-#()
-
-#raw() {
-#rawは{}ないの文字列をそのままHTMLとして出力します。
-}
-#export("content") {
-	<h1>Hello, #(name)!</h1>
-}
-
+<h1>#(message)!</h1>

@@ -20,6 +20,27 @@ let config = try Config()
 try config.setup()
 
 let drop = try Droplet(config)
-try drop.setup()
+
+// indexファイルを表示
+drop.get("index") { request in
+    return try drop.view.make("index.html")
+}
+
+//textファイルを表示
+drop.get("txt") { request in
+    return try drop.view.make("text.txt")
+}
+
+//leafテンプレートを表示
+drop.get("leaf") { request in
+    return try drop.view.make("hello", [
+        "message": "Hello, world!"
+        ])
+}
+
+drop.get("html") { request in
+    return try drop.view.make("html")
+}
 
 try drop.run()
+
