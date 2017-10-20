@@ -25,30 +25,27 @@ try drop.setup()
 drop.get("welcome"){ req in
     return "Hello"
 }
-drop.get("welcome", "to", "vapor"){ req in
-    return "Hello"
-}
 
-drop.get("anything", "*") { request in
-    return "/anythingの後ろのどんなものでもマッチする"
-}
-
-drop.add(.trace, "welcom", value: {req in
-    
-    return ""
-})
-
+//postメソッドを実行
 drop.post("welcome"){ req in
     return "Hello"
 }
 
+//ネスト
+drop.get("welcome/to/vapor"){ req in
+    return "Hello"
+}
+
+//引数で指定
+drop.get("welcome", "to", "vapor"){ req in
+    return "Hello"
+}
 
 //Type Parameter
 drop.get("users", Int.parameter) { req in
     let userId = try req.parameters.next(Int.self)
     return "You requested User #\(userId)"
 }
-
 
 //// 下記と同じ
 //drop.get("users", ":id") { req in
@@ -58,6 +55,46 @@ drop.get("users", Int.parameter) { req in
 //
 //    return "You requested User #\(userId)"
 // }
+
+//その他のエンドポイントの指定
+drop.add(.trace, "welcome") { request in
+    return "Hello"
+}
+
+//フォールバック
+drop.get("anything", "*") { request in
+    return "/anythingの後ろのどんなものでもマッチする"
+}
+
+drop.add(.trace, "welcom", value: {req in
+    
+    return ""
+})
+
+//リダイレクト
+drop.get("vapor") { request in
+    return Response(redirect: "http://vapor.codes")
+}
+
+//jsonを返す。
+drop.get("json") { request in
+    var json = JSON()
+    try json.set("number", 123)
+    try json.set("text", "unicorns")
+    try json.set("bool", false)
+    return json
+}
+
+//404
+drop.get("404") { request in
+    throw Abort(.notFound)
+}
+
+//error
+drop.get("error") { request in
+    throw Abort(.badRequest, reason: "Sorry 😱")
+}
+
 
 
 try drop.run()
