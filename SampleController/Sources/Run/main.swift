@@ -20,6 +20,19 @@ let config = try Config()
 try config.setup()
 
 let drop = try Droplet(config)
-try drop.setup()
+
+
+let hc = HelloController()
+drop.get("hello", handler: hc.sayHello)
+drop.get("helloAlt", String.parameter, handler: hc.sayHelloAlternate)
+
+
+let users = UserController()
+//ResourceRepresentableを適応しなければ、各エンドポイントそれぞれを登録する。
+//drop.get("users", handler: users.index)
+//drop.get("users", User.self, handler: users.show)
+
+//ResourceRepresentableを適応すれば、resourceメソッドで一括で登録できる。
+drop.resource("users", users)
 
 try drop.run()
