@@ -95,6 +95,35 @@ drop.get("error") { request in
     throw Abort(.badRequest, reason: "Sorry 😱")
 }
 
+//group
+drop.group("v1") { v1 in
+    
+    //GET /v1/users
+    v1.get("users") { req in
+        return "users"
+    }
+    //GET /v1/users/:id
+    v1.get("users", Int.parameter) { req in
+        let userId = try req.parameters.next(Int.self)
+        return "You requested User #\(userId)"
+    }
+}
 
+//grouped
+let v2 = drop.grouped("v2")
+v2.get("users"){ req in
+    return "users"
+}
+v2.get("users", Int.parameter) { req in
+    let userId = try req.parameters.next(Int.self)
+    return "You requested User #\(userId)"
+}
+
+//Collection
+//let v3 = V3Collection()
+//try drop.collection(v3)
+
+//EmptyInitializableを適応させると型指定でルーティングを設定出来る
+try drop.collection(V3Collection.self)
 
 try drop.run()

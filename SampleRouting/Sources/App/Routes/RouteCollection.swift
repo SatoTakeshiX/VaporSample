@@ -6,13 +6,22 @@
 //
 
 import Foundation
-
 import Vapor
 import HTTP
 import Routing
 
-class V3Collection: RouteCollection {
-    func buid(_ builder: RouteBuilder) {
-        
+public class V3Collection: RouteCollection, EmptyInitializable {
+    public required init() {}
+    public func build(_ builder: RouteBuilder) {
+        let v3 = builder.grouped("v3")
+        let users = v3.grouped("users")
+        let articles = v3.grouped("articles")
+        users.get { request in
+            return "Requested all users."
+        }
+        articles.get(String.parameter){ request in
+            let articleName = try request.parameters.next(String.self)
+            return "Requested \(articleName)"
+        }
     }
 }

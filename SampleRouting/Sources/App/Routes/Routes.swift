@@ -25,5 +25,3 @@ extension Droplet {
         }
     }
 }
-
-
